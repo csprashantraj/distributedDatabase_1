@@ -1,0 +1,8 @@
+cryptography
+dotenv
+Flask
+flask-cors
+psycopg2
+python-dotenv
+gunicorn
+ecdsa

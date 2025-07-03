@@ -1,10 +1,15 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from enc import encrypt_data
 from dec import decrypt_data
 import db
 from decimal import Decimal, getcontext
 
 app = Flask(__name__)
+
+# Configure CORS to allow requests only from a specific origin
+ALLOWED_ORIGIN = "https://multi-party-voting.onrender.com/"  # Replace with your actual website URL
+cors = CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGIN}})
 
 # Set precision to handle very large numbers
 getcontext().prec = 50
@@ -42,6 +47,11 @@ def retrieve():
     result = [{'x': row[0], 'y': row[1]} for row in rows]
 
     return jsonify(result), 200
+
+# Add error handler for invalid endpoints
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify({"error": "This is an invalid endpoint"}), 404
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
